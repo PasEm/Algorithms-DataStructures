@@ -83,7 +83,19 @@ public class ParseTreeTester {
 
     @Test
     public void test14(){
+        ParseTree parseTree = new ParseTree("((((5+2)*7)))-((((3+4))))");
+        Assert.assertEquals(42, parseTree.getValueOfTree());
+    }
+
+    @Test
+    public void test15(){
         ParseTree parseTree = new ParseTree("(((((5+2)*7+(3+4)))))");
         Assert.assertEquals(56, parseTree.getValueOfTree());
+    }
+
+    @Test
+    public void test16(){
+        ParseTree parseTree = new ParseTree("((((-(-5+2)*7+(3+4)))))");
+        Assert.assertEquals(28, parseTree.getValueOfTree());
     }
 }

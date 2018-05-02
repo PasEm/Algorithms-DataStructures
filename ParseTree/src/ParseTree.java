@@ -71,13 +71,26 @@ public class ParseTree {
     private Node root;
 
     public ParseTree(String parse) {
-        this.elements = new ArrayList<>();
-        int indexOfNumber = 0, previousParseLength = parse.length();
         boolean checkResultant = parse.charAt(0) == '-' && parse.charAt(1) == '(';
-        parse = deleteRedundantBracketAtEnds(checkResultant ? parse.substring(1, parse.length()) : parse);
-        parse = !checkResultant ? parse : (parse.charAt(0) == '-') ? parse : (previousParseLength - 1 != parse.length()) ? parse : '-' + parse;
-        checkResultant = checkResultant && (previousParseLength != parse.length());
-        for (int i = 0; i < parse.length() || indexOfNumber != 0; i++) {
+        this.elements = getArrayOfElements(parse, checkResultant);
+        int[] interval = getIntervalOfParse(elements, (checkResultant) ? 1 : 0, elements.size());
+        if (checkResultant && (elements.get(0).charAt(0) != '-') && (elements.size() == (interval[1] - interval[0] + 1))){
+            elements.add(0, "-");
+            interval[0]--;
+            interval[1]++;
+        }
+        checkResultant = checkResultant && (interval[1] - interval[0] != elements.size());
+        if (checkResultant){
+            this.root = new Node(null);
+            this.root.operator = new Operator('-');
+            this.root.childRight = makeTree(this.root, null, interval[0], interval[1]);
+        } else this.root = makeTree(null, null, interval[0], interval[1]);
+    }
+
+    private ArrayList<String> getArrayOfElements(String parse, boolean checkResultant){
+        int indexOfNumber = 0;
+        ArrayList<String> elements = new ArrayList<>();
+        for (int i = (checkResultant) ? 1 : 0; i < parse.length() || indexOfNumber != 0; i++) {
             if (i < parse.length() && Character.isDigit(parse.charAt(i))) {
                 ++indexOfNumber;
             } else {
@@ -89,22 +102,19 @@ public class ParseTree {
                     elements.add(String.valueOf(parse.charAt(i)));
             }
         }
-        if (checkResultant){
-            this.root = new Node(null);
-            this.root.operator = new Operator('-');
-            this.root.childRight = makeTree(this.root, null, 0, elements.size());
-        } else this.root = makeTree(null, null, 0, elements.size());
+        return elements;
     }
 
-    private static String deleteRedundantBracketAtEnds(String parse) {
-        if ((parse.charAt(0) != '(') && (parse.charAt(parse.length() - 1) != ')'))
-            return parse;
+    private static int[] getIntervalOfParse(ArrayList<String> elements, int begin, int end){
+        int[] interval = {begin, end};
+        if (elements.get(begin).charAt(0) != '(' && elements.get(end - 1).charAt(0) != ')')
+            return interval;
         int countOpenBracket = 0, countCloseBracket = 0, countOpenClose = 0, indexOfDelete = 0, checkNeedBracket = 0;
         boolean checkOpen = true;
-        for (int i = parse.length() - 1; i >= 0 && parse.charAt(i) == ')'; i--)
+        for (int i = end - 1; i >= begin && elements.get(i).charAt(0) == ')'; i--)
             countCloseBracket++;
-        for (int i = 0; i < parse.length(); i++) {
-            if (parse.charAt(i) == '(') {
+        for (int i = begin; i < end; i++) {
+            if (elements.get(i).charAt(0) == '(') {
                 countOpenBracket = (checkOpen) ? countOpenBracket + 1 : countOpenBracket;
                 if (checkNeedBracket == 1){
                     countOpenBracket = countOpenClose;
@@ -112,44 +122,13 @@ public class ParseTree {
                 }
                 countOpenClose++;
             } else checkOpen = false;
-            if (i < parse.length() - countCloseBracket && countOpenClose == 0)
-                return parse;
-            if (parse.charAt(i) == ')') {
-                if (i != parse.length() - countCloseBracket) {
-                    countOpenClose--;
-                    checkNeedBracket = (checkNeedBracket == 0) ? 1 : checkNeedBracket;
-                }
-                if (i == parse.length() - countCloseBracket) {
-                    if (countOpenClose == 0) {
-                        return parse;
-                    } else {
-                        indexOfDelete = Math.min(countOpenBracket, Math.min(countCloseBracket, countOpenClose));
-                        break;
-                    }
-                }
-            }
-        }
-        return parse.substring(indexOfDelete, parse.length() - indexOfDelete);
-    }
-
-    private static int[] getIntervalForSeparator(ArrayList<String> elements, int begin, int end){
-        int[] interval = {begin, end};
-        if (elements.get(begin).charAt(0) != '(' && elements.get(end - 1).charAt(0) != ')')
-            return interval;
-        int countOpenBracket = 0, countCloseBracket = 0, countOpenClose = 0, indexOfDelete = 0;
-        boolean checkOpen = true;
-        for (int i = end - 1; i >= begin && elements.get(i).charAt(0) == ')'; i--)
-            countCloseBracket++;
-        for (int i = begin; i < end; i++) {
-            if (elements.get(i).charAt(0) == '(') {
-                countOpenClose++;
-                countOpenBracket = (checkOpen) ? countOpenBracket + 1 : countOpenBracket;
-            } else checkOpen = false;
             if (i < end - countCloseBracket && countOpenClose == 0)
                 return interval;
             if (elements.get(i).charAt(0) == ')') {
-                if (i != end - countCloseBracket)
+                if (i != end - countCloseBracket) {
                     countOpenClose--;
+                    checkNeedBracket = (checkNeedBracket == 0) ? 1 : checkNeedBracket;
+                }
                 if (i == end - countCloseBracket) {
                     if (countOpenClose == 0) {
                         return interval;
@@ -168,7 +147,7 @@ public class ParseTree {
     private int getSeparatorOperator(int begin, int end) {
         Operator operator = new Operator();
         operator.priority = Integer.MAX_VALUE;
-        int[] interval = getIntervalForSeparator(elements, begin, end);
+        int[] interval = getIntervalOfParse(elements, begin, end);
         begin = interval[0];
         end = interval[1];
         int indexOperator = -1, countBracket = 0;
