@@ -71,26 +71,14 @@ public class ParseTree {
     private Node root;
 
     public ParseTree(String parse) {
-        boolean checkResultant = parse.charAt(0) == '-' && parse.charAt(1) == '(';
-        this.elements = getArrayOfElements(parse, checkResultant);
-        int[] interval = getIntervalOfParse(elements, (checkResultant) ? 1 : 0, elements.size());
-        if (checkResultant && (elements.get(0).charAt(0) != '-') && (elements.size() == (interval[1] - interval[0] + 1))){
-            elements.add(0, "-");
-            interval[0]--;
-            interval[1]++;
-        }
-        checkResultant = checkResultant && (interval[1] - interval[0] != elements.size());
-        if (checkResultant){
-            this.root = new Node(null);
-            this.root.operator = new Operator('-');
-            this.root.childRight = makeTree(this.root, null, interval[0], interval[1]);
-        } else this.root = makeTree(null, null, interval[0], interval[1]);
+        this.elements = getArrayOfElements(parse);
+        this.root = makeTree(null, null,0, elements.size());
     }
 
-    private ArrayList<String> getArrayOfElements(String parse, boolean checkResultant){
+    private ArrayList<String> getArrayOfElements(String parse){
         int indexOfNumber = 0;
         ArrayList<String> elements = new ArrayList<>();
-        for (int i = (checkResultant) ? 1 : 0; i < parse.length() || indexOfNumber != 0; i++) {
+        for (int i = 0; i < parse.length() || indexOfNumber != 0; i++) {
             if (i < parse.length() && Character.isDigit(parse.charAt(i))) {
                 ++indexOfNumber;
             } else {
@@ -116,7 +104,7 @@ public class ParseTree {
         for (int i = begin; i < end; i++) {
             if (elements.get(i).charAt(0) == '(') {
                 countOpenBracket = (checkOpen) ? countOpenBracket + 1 : countOpenBracket;
-                if (checkNeedBracket == 1){
+                if (checkNeedBracket == 1 && (countOpenClose < countOpenBracket)){
                     countOpenBracket = countOpenClose;
                     checkNeedBracket = 2;
                 }
@@ -147,9 +135,6 @@ public class ParseTree {
     private int getSeparatorOperator(int begin, int end) {
         Operator operator = new Operator();
         operator.priority = Integer.MAX_VALUE;
-        int[] interval = getIntervalOfParse(elements, begin, end);
-        begin = interval[0];
-        end = interval[1];
         int indexOperator = -1, countBracket = 0;
         for (int i = begin; i < end; i++) {
             Operator current = isOperator(elements.get(i)) ? new Operator(elements.get(i).charAt(0)) : new Operator();
@@ -159,20 +144,14 @@ public class ParseTree {
                 operator = current;
             }
         }
-        if (indexOperator == -1) {
-            for (int i = begin; i < end; i++) {
-                Operator current = isOperator(elements.get(i)) ? new Operator(elements.get(i).charAt(0)) : new Operator();
-                if (operator.priority >= current.priority && current.priority != Operator.CLOSE && current.priority != Operator.OPEN) {
-                    indexOperator = i;
-                    operator = current;
-                }
-            }
-        }
         return indexOperator;
     }
 
     private Node makeTree(Node parent, Node root, int begin, int end){
         if (begin != end) {
+            int[] interval = getIntervalOfParse(elements, begin, end);
+            begin = interval[0];
+            end = interval[1];
             int index = getSeparatorOperator(begin, end);
             if (root == null) {
                 root = (index == -1) ? null : new Node (parent, elements.get(index));

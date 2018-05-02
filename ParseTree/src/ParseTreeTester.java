@@ -98,4 +98,10 @@ public class ParseTreeTester {
         ParseTree parseTree = new ParseTree("((((-(-5+2)*7+(3+4)))))");
         Assert.assertEquals(28, parseTree.getValueOfTree());
     }
+
+    @Test
+    public void test17(){
+        ParseTree parseTree = new ParseTree("(-(((-(-5+2)*7+(3+4)))))");
+        Assert.assertEquals(-28, parseTree.getValueOfTree());
+    }
 }
