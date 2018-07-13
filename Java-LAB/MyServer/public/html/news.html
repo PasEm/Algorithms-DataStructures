@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News</title>
+    <link href="https://fonts.googleapis.com/css?family=Galada|Muli|Source+Serif+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Muli', sans-serif;
+            background: url(../../Resources/df1669d1d8182940a54fa925eb1f04e1eb82cf29_s2_n2.png) no-repeat;
+        }
+
+        .media-body {
+            font-family: 'Galada', cursive;
+        }
+
+        .container-footer {
+            font-family: 'Source Serif Pro', serif;
+            color: dimgrey;
+        }
+        .btn {
+            width: 140px;
+            background-color: #b0c4de;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div class="modal" id="myModal-signing" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center">Log in</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-addon">
+                        <span class="input-group-text" style="background-color: #6c92af; color: white;"
+                              id="signText">Username</span>
+                    </div>
+                    <input type="text"
+                           class="form-control" id="login" placeholder="Username" aria-label="Username"
+                           aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-addon">
+                        <span class="input-group-text" style="background-color: #6c92af; color: white;"
+                              id="passwordText">Password</span>
+                    </div>
+                    <input type="password"
+                           class="form-control" id="customPasswordSign" placeholder="Write you password" aria-label="Password"
+                           aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="modal-footer" style="margin: auto">
+                <a href="./main.html" class="btn btn-lg active" role="button"
+                   style="float: none; background-color: #6c92af; color: white; width: 200px;" aria-pressed="true">
+                    <b>Log in</b>
+                </a>
+                <a href="./registration.html" class="btn btn-lg active" role="button"
+                   style="float: none; background-color: #6c92af; color: white; width: 200px;" aria-pressed="true">
+                    <b>Create account</b>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color:#b0c4de; color: white;">
+    <a class="navbar-brand" href="main.html">
+        <div class="media">
+            <img class="align-self-center mr-3" src="https://sun1-6.userapi.com/c635102/v635102640/33af6/oNFlsDT5SmA.jpg"
+                 width="128px"  height="64px" alt="Title of site">
+            <div class="media-body">
+                <h1 class="mt-3">Images</h1>
+            </div>
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="main.html">
+                    Main
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./review.html">
+                    Review
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal-signing">
+                    Log in
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="./news.html">
+                    News<span class="sr-only">(current)</span>
+                </a>
+            </li>
+        </ul>
+        <form class="form-inline my-0 my-lg-0">
+            <div class="input-group">
+                <input type="search" class="form-control w-700 p-1" style="width: 700px;" placeholder="Search"
+                       aria-label="Search" aria-describedby="basic-addon0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="background-color: #6c92af; color: white; padding: 5px;">&#128270;</span>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</nav>
+<div class="container center" style="padding-top:8.5%; padding-left:10%; padding-right: 10%;">
+    <div class="row">
+        <div class="container-header mb-2">
+            <h1 style="font-size: 52px;"><strong>News</strong></h1>
+        </div>
+    </div>
+    <div class="container-body">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="background-color: #6c92af; color:white">
+                    <div class="mr" style="float: left; margin: auto;">
+                        <h4>All announces</h4>
+                    </div>
+                    <div class="mr-3" style="float: right;">
+                        <a href="news.html" role="button" class="btn btn-light"
+                                style=" border-color: lightgrey;
+                                background-color: #ffdab9; color: dimgrey;">
+                            Update
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body font-weight-light">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="alert-primary">
+                                <th scope="col">Title</th>
+                                <th scope="col">Author</th>
+                                <th scope="col">What`s new</th>
+                                <th scope="col">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Global announce</th>
+                                <th>@Emil</th>
+                                <th>Site has been created</th>
+                                <th>10.07.2018</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Add content I</th>
+                                <th>@Emil</th>
+                                <th>Following pages were added: Registration, Main</th>
+                                <th>10.07.2018</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Add content II</th>
+                                <th>@Emil</th>
+                                <th>Following pages were added: News, Review</th>
+                                <th>11.07.2018</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-footer" style="padding-top: 140px;">
+    <footer class="footer fixed-bottom" style="background-color:#b0c4de; padding: 20px;">
+        <div class="container" style="float: left">
+            <span class="text">&copy; 2018 Pashaev Emil</span>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
